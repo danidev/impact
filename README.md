@@ -1,48 +1,44 @@
 # impact
-video synthesizer
+Video synthesizer for Linux and macOS
 
 ## System Requirements
 
-Uses Raspberry Pi OS Lite (32 bit)
-
-## SSH Setup
-
-```bash
-sudo systemctl enable ssh
-sudo systemctl start ssh
-```
+- Linux (Ubuntu, Debian, etc.) or macOS
+- Python 3.6+
+- OpenGL-compatible graphics
 
 ## Installation
 
-### Main Dependencies
+### Linux Setup
 
 ```bash
-sudo apt install -y python3-pip
-sudo apt install python3-pygame
-sudo apt install python3-psutil
+# Install system dependencies
+sudo apt install -y python3-pip python3-pygame python3-psutil
+
+# Audio dependencies
+sudo apt install -y portaudio19-dev python3-pyaudio
+
+# MIDI support
+sudo apt install -y python3-rtmidi
+
+# Install Python packages (if not covered by system packages)
+pip3 install --user pygame psutil pyaudio python-rtmidi
 ```
 
-### Minimal X Server (for headless setup)
+### macOS Setup
 
 ```bash
-sudo apt install --no-install-recommends xserver-xorg xinit x11-xserver-utils
-```
+# Install Homebrew if not already installed
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-### Audio Dependencies
+# Install Python if needed
+brew install python
 
-For audio processing, additional dependencies are required:
+# Install dependencies
+pip3 install pygame psutil pyaudio python-rtmidi
 
-```bash
-sudo apt install portaudio19-dev
-sudo apt install python3-pyaudio
-```
-
-### MIDI Support
-
-For MIDI control support, install the `rtmidi` package:
-
-```bash
-sudo apt install python3-rtmidi
+# Note: On newer macOS versions, you might need to grant permissions
+# for terminal access to your MIDI devices
 ```
 
 ## Usage
@@ -50,7 +46,13 @@ sudo apt install python3-rtmidi
 To run the video synthesizer:
 
 ```bash
-python3 synth_player.py
+python3 impact.py
+```
+
+To run in windowed mode instead of fullscreen:
+
+```bash
+python3 impact.py --windowed
 ```
 
 ### Controls
@@ -95,7 +97,7 @@ def draw(self, surface):
 
 ## Adding Visualizations
 
-Create new Python files in the `synth_video/visualizations/` directory. Each visualization should:
+Create new Python files in the `impact_synth/visualizations/` directory. Each visualization should:
 
 1. Import the base Visualization class
 2. Create a class that inherits from Visualization
@@ -104,6 +106,7 @@ Create new Python files in the `synth_video/visualizations/` directory. Each vis
 Example:
 ```python
 from ..visualization import Visualization
+import pygame
 
 class MyVisualization(Visualization):
     def __init__(self):
@@ -126,7 +129,7 @@ class MyVisualization(Visualization):
 For audio visualizations, place WAV files in the `samples` directory:
 
 ```bash
-mkdir -p /home/daniele/git/smallprojects/synth-video/samples
+mkdir -p samples
 # Then copy your WAV files to this directory
 ```
 
